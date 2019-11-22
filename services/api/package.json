@@ -13,14 +13,24 @@
     "mongoose": "^5.1.6",
     "mongoose-timestamp": "^0.6.0",
     "mongoose-unique-validator": "^2.0.2",
-    "supertest": "^3.3.0",
     "xml-js": "^1.6.11"
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --reporter spec"
+    "test": "cross-env NODE_ENV=development mocha \"./{,!(node_modules)/**/}*.test.js\" --exit"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "cross-env": "^5.1.6",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.1",
+    "rewire": "^4.0.1",
+    "sinon": "^7.5.0",
+    "sinon-chai": "^3.1.0",
+    "supertest": "^3.4.2",
+    "node-mocks-http": "^1.8.0",
+    "superagent-proxy": "^2.0.0"
   }
 }
