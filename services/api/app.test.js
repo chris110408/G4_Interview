@@ -7,9 +7,8 @@ const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 const rewire = require("rewire");
 const request = require("supertest");
-var app = rewire("./app");
-var sandbox = sinon.createSandbox();
-
+let app = rewire("./app");
+const sandbox = sinon.createSandbox();
 
 describe("app", () => {
   afterEach(() => {
@@ -61,5 +60,4 @@ describe("app", () => {
         });
     });
   });
-
 });

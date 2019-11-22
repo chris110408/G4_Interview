@@ -21,8 +21,8 @@ describe("Customers Controller", async () => {
   let sortStub;
   let findByIdAndUpdateStub;
   let findByIdAndRemoveStub;
-  let mockResponse
-  beforeEach(async() => {
+  let mockResponse;
+  beforeEach(async () => {
     sampleCustomer = {
       id: 123,
       firstName: "loo",
@@ -45,29 +45,29 @@ describe("Customers Controller", async () => {
         firstName: "b",
         lastName: "chen",
         date: new Date(1552261496282)
-      },{
+      },
+      {
         id: 3,
         firstName: "c",
         lastName: "chen",
         date: new Date(1552261496283)
-      },
+      }
     ];
     findByIdAndUpdateStub = sandbox
-        .stub(mongoose.Model, "findByIdAndUpdate")
-        .resolves(sampleCustomer);
+      .stub(mongoose.Model, "findByIdAndUpdate")
+      .resolves(sampleCustomer);
 
     findByIdAndRemoveStub = sandbox
-        .stub(mongoose.Model, "findByIdAndRemove")
-        .resolves(sampleCustomer);
+      .stub(mongoose.Model, "findByIdAndRemove")
+      .resolves(sampleCustomer);
     findByIdStub = sandbox
       .stub(mongoose.Model, "findById")
       .resolves(sampleCustomer);
     sortStub = sandbox.stub().resolves(Customers);
-    findStub = sandbox.stub(mongoose.Model, "find").returns({sort:sortStub});
+    findStub = sandbox.stub(mongoose.Model, "find").returns({ sort: sortStub });
     const mockRequest = httpMocks.createRequest({
       method: "GET",
-      query: {
-      }
+      query: {}
     });
 
     mockResponse = httpMocks.createResponse();
@@ -81,10 +81,8 @@ describe("Customers Controller", async () => {
 
   context("getCustomers", () => {
     it("should get sorted customers", async () => {
-
       let data = mockResponse._getJSONData();
-      expect(data.length)
-          .to.equal(3);
+      expect(data.length).to.equal(3);
     });
 
     it("should call find", async () => {
@@ -93,7 +91,7 @@ describe("Customers Controller", async () => {
 
     it("should sort Customer", async () => {
       expect(sortStub).to.have.been.called;
-      expect(sortStub).to.have.been.calledWith({date: -1});
+      expect(sortStub).to.have.been.calledWith({ date: -1 });
     });
   });
   context("newCustomer", () => {
@@ -152,7 +150,6 @@ describe("Customers Controller", async () => {
     });
   });
 
-
   context("replaceCustomer", async () => {
     it("should replace customer by using id", async () => {
       const mockRequest = httpMocks.createRequest({
@@ -160,60 +157,58 @@ describe("Customers Controller", async () => {
         params: {
           customerId: 123
         },
-        body:sampleCustomer
+        body: sampleCustomer
       });
 
       let mockResponse = httpMocks.createResponse();
       await customers.replaceCustomer(mockRequest, mockResponse);
       let data = mockResponse._getJSONData();
 
-       expect(data)
-            .to.have.property('success')
-            .to.equal(true);
-      });
+      expect(data)
+        .to.have.property("success")
+        .to.equal(true);
+    });
   });
 
-
   context("updateCustomer", async () => {
-    let mockResponse
-    let mockRequest
+    let mockResponse;
+    let mockRequest;
     beforeEach(async () => {
       mockRequest = httpMocks.createRequest({
         method: "patch",
         params: {
           customerId: 123
         },
-        body:sampleCustomer
+        body: sampleCustomer
       });
 
       mockResponse = httpMocks.createResponse();
     });
-
 
     it("should update customer by using id", async () => {
       await customers.updateCustomer(mockRequest, mockResponse);
       let data = mockResponse._getJSONData();
 
       expect(data)
-          .to.have.property('success')
-          .to.equal(true);
+        .to.have.property("success")
+        .to.equal(true);
     });
-    it('should catch error if there is one', async()=>{
+    it("should catch error if there is one", async () => {
       sandbox.restore();
-      sandbox.stub(mongoose.Model,'findByIdAndUpdate').rejects(new Error('fake'));;
-      await customers.updateCustomer(mockRequest, mockResponse)
+      sandbox
+        .stub(mongoose.Model, "findByIdAndUpdate")
+        .rejects(new Error("fake"));
+      await customers.updateCustomer(mockRequest, mockResponse);
       let data = mockResponse._getJSONData();
       expect(data)
-          .to.have.property('success')
-          .to.equal(false);
-    })
-
+        .to.have.property("success")
+        .to.equal(false);
+    });
   });
 
-
   context("deleteCustomer", async () => {
-    let mockResponse
-    let mockRequest
+    let mockResponse;
+    let mockRequest;
     beforeEach(async () => {
       mockRequest = httpMocks.createRequest({
         method: "delete",
@@ -226,18 +221,15 @@ describe("Customers Controller", async () => {
       await customers.deleteCustomer(mockRequest, mockResponse);
     });
 
-
     it("should delete Customer by using id", async () => {
       let data = mockResponse._getJSONData();
 
       expect(data)
-          .to.have.property('success')
-          .to.equal(true);
+        .to.have.property("success")
+        .to.equal(true);
     });
     it("should call findByIdAndRemove", async () => {
       expect(findByIdAndRemoveStub).to.have.been.calledOnce;
     });
   });
-
-
 });
